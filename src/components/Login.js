@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {BaseUrl} from "../constants";
 import axios from "axios";
 
@@ -6,6 +6,12 @@ function Login(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [Err, setErr] = useState("")
+
+    useEffect(() => {
+        if (localStorage.getItem("Token") !== null) {
+            window.location.href = "/logout";
+        }
+    }, []);
 
     function usernameChangeHandler(event) {
         setUsername(event.target.value);
