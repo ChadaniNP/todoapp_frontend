@@ -1,1 +1,1 @@
-export const BASEURL = "https://to-do-app-backend-cyan.vercel.app";
+export const BaseUrl = "https://to-do-app-backend-cyan.vercel.app";
