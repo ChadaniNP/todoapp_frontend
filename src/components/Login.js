@@ -1,64 +1,48 @@
-import React, {useEffect, useState} from 'react';
-import {BaseUrl} from "../constants";
+import React, { useEffect, useState } from "react";
+import { BaseUrl } from "../constants";
 import axios from "axios";
+import TodoList from "./TodoList";
 
-function Login(props) {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const [Err, setErr] = useState("")
+function Login() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [Err, setErr] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    useEffect(() => {
-        if (localStorage.getItem("Token") !== null) {
-            window.location.href = "/logout";
-        }
-    }, []);
-
-    function usernameChangeHandler(event) {
-        setUsername(event.target.value);
+  useEffect(() => {
+    if (localStorage.getItem("Token")) {
+      setIsLoggedIn(true);
     }
+  }, []);
 
-    function passwordChangeHandler(event) {
-        setPassword(event.target.value);
-    }
+  function login() {
+    axios.post(`${BaseUrl}/api/login/`, { username, password })
+      .then((response) => {
+       localStorage.setItem("Token", response.data.token);
+        setErr("✅ Logged in successfully!");
+        setIsLoggedIn(true);  // ✅ Update state to show TodoList
+      })
+      .catch((error) => {
+        console.log(error);
+        setErr(error.response?.data || "Login failed.");
+      });
+  }
 
-    function login() {
-        let data = JSON.stringify({
-            "username": username,
-            "password": password
-        });
-
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: BaseUrl+'/api/login/',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            data: data
-        };
-
-        axios.request(config)
-            .then((response) => {
-                console.log(JSON.stringify(response.data));
-                localStorage.setItem("Token", response.data.token);
-                setErr("Loggedin successfully");
-            })
-            .catch((error) => {
-                console.log(error);
-                setErr(error.response.data);
-            });
-
-    }
-
-    return (
-        <div>
-            <h1>Login</h1>
-            <input type="text" placeholder="Username" onChange={usernameChangeHandler}/>
-            <input type="password" placeholder="Password" onChange={passwordChangeHandler}/>
-            <button onClick={login}>Login</button>
-            <p>{Err}</p>
-        </div>
-    );
+  return (
+    <div>
+      {!isLoggedIn ? (
+        <>
+          <h1>Login</h1>
+          <input type="text" placeholder="Username" onChange={(e) => setUsername(e.target.value)} />
+          <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
+          <button onClick={login}>Login</button>
+          <p>{Err}</p>
+        </>
+      ) : (
+        <TodoList />  // ✅ Show TodoList after login
+      )}
+    </div>
+  );
 }
 
 export default Login;
