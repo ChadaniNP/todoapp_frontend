@@ -24,10 +24,10 @@ function TodoForm({ onTodoAdded }) {
   method: "post",
   url: `${BaseUrl}/api/todos/create/`, // Adjusted URL for creating todos
   headers: {
-   "Authorization": `Token ${localStorage.getItem("Token")}`, // Authorization header with token
-    "Content-Type": "application/json",
-  },
-  data: data,
+        Authorization: `Token ${token}`,  // Ensure token is included in the headers
+        "Content-Type": "application/json",
+    },
+    data: data,
 };
 
     try {

@@ -1,10 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BaseUrl } from "../constants";
 
-function TodoForm({ onTodoAdded }) {
+function TodoForm({ onTodoAdded, onTodoUpdated, editingTodo }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
+  // If editingTodo exists, set form values to the todo's current values
+  useEffect(() => {
+    if (editingTodo) {
+      setTitle(editingTodo.title);
+      setDescription(editingTodo.description);
+    }
+  }, [editingTodo]);
 
   async function handleSubmit(e) {
     e.preventDefault(); // Prevent page reload
@@ -15,51 +23,57 @@ function TodoForm({ onTodoAdded }) {
       return;
     }
 
-    let data = {
-      title: title,
-      description: description,
+    const data = { title, description };
+
+    const config = {
+      method: "post",
+      url: `${BaseUrl}/api/todos/`, // Adjusted URL for flexibility
+      headers: {
+        Authorization: `Token ${localStorage.getItem("Token")}`, // Authorization header with token
+        "Content-Type": "application/json",
+      },
+      data: data,
     };
 
-    let config = {
-  method: "post",
-  url: `${BaseUrl}/api/todos/create/`, // Adjusted URL for creating todos
-  headers: {
-        Authorization: `Token ${token}`,  // Ensure token is included in the headers
-        "Content-Type": "application/json",
-    },
-    data: data,
-};
-
     try {
-    const response = await axios(config);
-    console.log("Todo added:", response.data); // Log the response to ensure the todo was added
-    onTodoAdded(); // Call onTodoAdded to fetch the updated list of todos
-    setTitle(""); // Reset the form fields
-    setDescription(""); // Reset the form fields
-  } catch (error) {
-    console.log(error);
-  }
+      // If editingTodo exists, make a PUT request to update the todo
+      if (editingTodo) {
+        const response = await axios.put(`${BaseUrl}/api/todos/${editingTodo.id}/`, data, {
+          headers: { Authorization: `Token ${localStorage.getItem("Token")}` },
+        });
+        onTodoUpdated(response.data);  // Pass updated todo to parent component
+      } else {
+        // If no editingTodo, it means we are adding a new todo
+        const response = await axios(config);
+        onTodoAdded(response.data); // Pass new todo to parent component
+      }
+
+      // Reset form fields after submit
+      setTitle("");
+      setDescription("");
+    } catch (error) {
+      console.error("Error while adding/updating todo:", error);
+    }
   }
 
   return (
     <div>
-      <h2>Add Todo</h2>
-      <form onSubmit={handleSubmit}> {/* Ensure onSubmit is set correctly */}
-  <input
-    type="text"
-    placeholder="Title"
-    value={title}
-    onChange={(e) => setTitle(e.target.value)}
-  />
-  <input
-    type="text"
-    placeholder="Description"
-    value={description}
-    onChange={(e) => setDescription(e.target.value)}
-  />
-  <button type="submit">Add Todo</button> {/* This button submits the form */}
-</form>
-
+      <h2>{editingTodo ? "Edit Todo" : "Add Todo"}</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+        />
+        <button type="submit">{editingTodo ? "Update Todo" : "Add Todo"}</button>
+      </form>
     </div>
   );
 }
