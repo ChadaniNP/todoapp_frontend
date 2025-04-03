@@ -1,70 +1,114 @@
-# Getting Started with Create React App
+# To-Do List Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is a full-stack **To-Do List application** built using **React (Frontend)** and **Django REST Framework (Backend)**. The application allows users to **register, log in, create, update, and delete tasks** while maintaining user authentication.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **User Authentication** (Register, Login, Logout)
+- **Create, Read, Update, and Delete (CRUD) operations** for tasks
+- **Token-based Authentication** using Django REST Framework
+- **Responsive UI** with React
+- **Integration with PostgreSQL database**
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Frontend
+- React (JavaScript)
+- React Hooks
+- Axios (for API calls)
+- Tailwind CSS (for styling)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Backend
+- Django REST Framework
+- PostgreSQL
+- Django Authentication with DRF Tokens
+- Django ORM
 
-### `npm test`
+## Installation & Setup
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Prerequisites
+- Node.js & npm
+- Python & pip
+- PostgreSQL Database
 
-### `npm run build`
+### Backend Setup
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/yourusername/todo-app.git
+   cd todo-app/backend
+   ```
+2. Create a virtual environment:
+   ```sh
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+3. Install dependencies:
+   ```sh
+   pip install -r requirements.txt
+   ```
+4. Apply database migrations:
+   ```sh
+   python manage.py migrate
+   ```
+5. Run the Django development server:
+   ```sh
+   python manage.py runserver
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Frontend Setup
+1. Navigate to the frontend folder:
+   ```sh
+   cd ../frontend
+   ```
+2. Install dependencies:
+   ```sh
+   npm install
+   ```
+3. Start the React application:
+   ```sh
+   npm start
+   ```
+4. Open your browser and visit: [http://localhost:3000](http://localhost:3000)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## API Endpoints
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| Method | Endpoint                | Description                |
+|--------|--------------------     |----------------------------|
+| POST   | /api/register/          | Register a new user        |
+| POST   | /api/login/             | Log in a user              |
+| GET    | /api/todos/             | Get all tasks              |
+| POST   | /api/todos/create/      | Create a new task          |
+| PUT    | /api/todos/{id}/        | Update a specific task     |
+| DELETE | /api/todos/{id}/delete  | Delete a specific task     |
 
-### `npm run eject`
+## Running Tests
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Backend Tests (Django)
+Run tests using:
+```sh
+pytest
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Frontend Tests (React)
+Run tests using:
+```sh
+npm test
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Deployment
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Backend Deployment (Vercel or Render)
+- Configure **`DATABASE_URL`** and **`SECRET_KEY`** as environment variables.
+- Use **`gunicorn`** as the WSGI server.
 
-## Learn More
+### Frontend Deployment (Vercel)
+- Push your React project to GitHub.
+- Connect Vercel to your repository and deploy.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## CI/CD Integration
+- **GitHub Actions** or **CircleCI** for testing and automatic deployment.
+- **Linting and formatting checks** before merging code.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contributors
+- Chadani Shilpakar
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
