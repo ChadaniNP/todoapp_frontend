@@ -11,7 +11,7 @@ describe('Todo App Routing', () => {
         <App />
       </MemoryRouter>
     );
-    // expect(screen.getByText(/home/i)).toBeInTheDocument();
+    expect(screen.getByText(/home/i)).toBeInTheDocument();
   });
 
   test('renders Register page on "/register" route', () => {

@@ -12,8 +12,9 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Navbar /> {/* Always show Navbar with Logout button */}
+        {/*<Navbar /> /!* Always show Navbar with Logout button *!/*/}
         <Routes>
+          <Route path="/" element={<Navbar />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/logout" element={<Logout />} />
