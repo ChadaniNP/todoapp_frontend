@@ -45,6 +45,10 @@
     "jest-environment-jsdom": "^29.7.0"
   },
   "jest": {
+  "setupFilesAfterEnv": ["@testing-library/jest-dom/extend-expect"]
+},
+
+  "jest": {
     "transformIgnorePatterns": [
       "node_modules/(?!(axios|react-router-dom)/)"
     ]
