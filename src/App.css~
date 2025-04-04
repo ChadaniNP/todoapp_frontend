@@ -55,6 +55,15 @@ input, button, a {
     margin-right: 10px; /* Adds space after each field */
 }
 
+/* Add spacing around each task */
+ul li {
+    display: block; /* Ensure each task is on a new line */
+    margin-bottom: 10px; /* Add margin at the bottom of each task */
+    padding: 10px; /* Optional: Add padding inside each task for spacing */
+    border: 1px solid #ccc; /* Optional: Add border around tasks */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    background-color: #f9f9f9; /* Optional: Add background color */
+}
 
 /* Add spacing around each task in the Todo List */
 .todo-list li {

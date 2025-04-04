@@ -1,67 +1,107 @@
-import React, {useState} from 'react';
+import React, { useState } from "react";
 import Home from "./Home";
-import {BASEURL} from "../constants";
+import { BaseUrl } from "../constants";
 import axios from "axios";
+import Navbar from "./Navbar";
 
 function Register(props) {
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [Err, setErr] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [err, setErr] = useState(""); // Changed to lowercase for consistency
+  const [successMessage, setSuccessMessage] = useState(""); // New state for success messages
 
-function usernameChangeHandler(event) {
+  // Handle input changes
+  const usernameChangeHandler = (event) => {
     setUsername(event.target.value);
-}
-function emailChangeHandler(event) {
+  };
+
+  const emailChangeHandler = (event) => {
     setEmail(event.target.value);
-}
-function passwordChangeHandler(event) {
+  };
+
+  const passwordChangeHandler = (event) => {
     setPassword(event.target.value);
-}
+  };
 
-function register(){
+  // Register function
+  const register = () => {
     if (username === "" || email === "" || password === "") {
-        setErr("All fields are required");
-    }
-    else {
-let data = JSON.stringify({
-  "username": username,  // Use the actual state value
-  "email": email,
-  "password": password
-});
+      setErr("⚠️ Please enter all fields.");
+      setSuccessMessage(""); // Clear success message
+    } else {
+      const data = JSON.stringify({
+        username,
+        email,
+        password,
+      });
 
-let config = {
-  method: 'post',
-  maxBodyLength: Infinity,
-  url: BASEURL+'/api/register/',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  data : data
-};
+      const config = {
+        method: "post",
+        maxBodyLength: Infinity,
+        url: `${BaseUrl}/api/register/`, // Ensure correct URL
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: data,
+      };
 
-axios.request(config)
-.then((response) => {
-  console.log(JSON.stringify(response.data));
-  setErr("Registered Successfully");
-})
-.catch((error) => {
-  console.log(error);
-  setErr(error.response.data);
-});
+      axios
+        .request(config)
+        .then((response) => {
+          console.log("Registration successful:", response.data);
+          setErr(""); // Clear error message on success
+          setSuccessMessage("✅ Registration successful! Please log in.");
+        })
+        .catch((error) => {
+          console.error("Error during registration:", error);
+          setSuccessMessage(""); // Clear success message on error
+          setErr(error.response?.data || "❌ Registration failed. Please try again.");
+        });
     }
+  };
+
+  return (
+    <div>
+      <Navbar />
+      <h1>Register</h1>
+
+      {/* Registration form */}
+      <div>
+        <label>Username:</label>
+        <input
+          type="text"
+          value={username}
+          onChange={usernameChangeHandler}
+          placeholder="Enter username"
+        />
+      </div>
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          value={email}
+          onChange={emailChangeHandler}
+          placeholder="Enter email"
+        />
+      </div>
+      <div>
+        <label>Password:</label>
+        <input
+          type="password"
+          value={password}
+          onChange={passwordChangeHandler}
+          placeholder="Enter password"
+        />
+      </div>
+
+      <button onClick={register}>Register</button>
+
+      {/* Display error or success messages */}
+      {err && <p style={{ color: "red" }}>{err}</p>}
+      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+    </div>
+  );
 }
 
-    return  (
-        <div>
-            <Home/>
-            <h1>Register</h1>
-            <p>Username<input type="text" placeholder="Username" onChange={usernameChangeHandler}/></p>
-            <p>Email<input type="email" placeholder="Email" onChange={emailChangeHandler}/></p>
-            <p>Password<input type="password" placeholder="Password" onChange={passwordChangeHandler}/></p>
-            <button onClick={register}>Register</button>
-            <p>{Err}</p>
-        </div>
-    );
-}
-    export default Register;
+export default Register;
