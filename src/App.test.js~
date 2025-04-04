@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
-import '@testing-library/jest-dom/extend-expect'; // for assertions like toBeInTheDocument()
+import '@testing-library/jest-dom';
 
 // A helper function to render the App with BrowserRouter to handle routing
 const renderWithRouter = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>);
