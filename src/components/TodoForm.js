@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BaseUrl } from "../constants";
 
-function TodoForm({ onTodoAdded, onTodoUpdated, editingTodo }) {
+function TodoForm({ fetchTodos, editingTodo, onTodoUpdated, onTodoAdded, setEditingTodo }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
-  // If editingTodo exists, set form values to the todo's current values
+  // Update form fields when an edit is triggered
   useEffect(() => {
     if (editingTodo) {
       setTitle(editingTodo.title);
@@ -14,47 +14,44 @@ function TodoForm({ onTodoAdded, onTodoUpdated, editingTodo }) {
     }
   }, [editingTodo]);
 
-  async function handleSubmit(e) {
-    e.preventDefault(); // Prevent page reload
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("Token");
 
-    const token = localStorage.getItem("Token"); // Get token from localStorage
     if (!token) {
       alert("⚠️ No token found! Please log in first.");
       return;
     }
 
-    const data = { title, description };
+    let data = { title, description };
 
-    const config = {
-      method: "post",
-      url: `${BaseUrl}/api/todos/`, // Adjusted URL for flexibility
-      headers: {
-        Authorization: `Token ${localStorage.getItem("Token")}`, // Authorization header with token
-        "Content-Type": "application/json",
-      },
-      data: data,
-    };
-
-    try {
-      // If editingTodo exists, make a PUT request to update the todo
-      if (editingTodo) {
+    if (editingTodo) {
+      // If we are editing, update the existing todo
+      try {
         const response = await axios.put(`${BaseUrl}/api/todos/${editingTodo.id}/`, data, {
-          headers: { Authorization: `Token ${localStorage.getItem("Token")}` },
+          headers: { Authorization: `Token ${token}`, "Content-Type": "application/json" },
         });
-        onTodoUpdated(response.data);  // Pass updated todo to parent component
-      } else {
-        // If no editingTodo, it means we are adding a new todo
-        const response = await axios(config);
-        onTodoAdded(response.data); // Pass new todo to parent component
+        onTodoUpdated(response.data); // Notify the parent component about the update
+      } catch (error) {
+        console.log("Error updating todo:", error);
       }
-
-      // Reset form fields after submit
-      setTitle("");
-      setDescription("");
-    } catch (error) {
-      console.error("Error while adding/updating todo:", error);
+    } else {
+      // If not editing, create a new todo
+      try {
+        const response = await axios.post(`${BaseUrl}/api/todos/create/`, data, {
+          headers: { Authorization: `Token ${token}`, "Content-Type": "application/json" },
+        });
+        onTodoAdded(response.data);
+      } catch (error) {
+        console.log("Error adding todo:", error);
+      }
     }
-  }
+
+    setTitle(""); // Clear form fields after submit
+    setDescription("");
+    setEditingTodo(null); // Reset editingTodo
+    fetchTodos(); // Refresh the todo list
+  };
 
   return (
     <div>

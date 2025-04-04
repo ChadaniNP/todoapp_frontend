@@ -36,16 +36,35 @@
     transform: rotate(360deg);
   }
 }
-.todo-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
+
+/* Style for each task */
+ul li {
+    display: block; /* Ensures each task is on a new line */
+    margin-bottom: 10px; /* Adds space between tasks */
+    padding: 10px; /* Adds padding inside each task */
+    border: 1px solid #ccc; /* Optional: Adds a border around tasks */
+    border-radius: 5px; /* Optional: Adds rounded corners to tasks */
+    background-color: #f9f9f9; /* Optional: Adds a background color to tasks */
 }
 
-.todo-card {
-  background: #f9f9f9;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  width: 250px;
+/* Ensure that the list (ul) has no default padding */
+ul {
+    padding-left: 0;
+}
+
+/* Add spacing around each task in the Todo List */
+.todo-list li {
+    display: block; /* Ensure each task is on a new line */
+    margin-bottom: 10px; /* Add margin at the bottom of each task */
+    padding: 10px; /* Optional: Add padding inside each task for spacing */
+    border: 1px solid #ccc; /* Optional: Add border around tasks */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    background-color: #f9f9f9; /* Optional: Add background color */
+}
+
+/* Add spacing for the entire todo list */
+.todo-list {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 0; /* Remove padding for the list itself */
 }
