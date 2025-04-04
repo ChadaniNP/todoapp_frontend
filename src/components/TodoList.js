@@ -62,7 +62,7 @@ const TodoList = () => {
 
     try {
       const token = localStorage.getItem("Token");
-      await axios.put(`${BaseUrl}/api/todos/${todo.id}/update/`, updatedTodo, {
+      await axios.put(`${BaseUrl}/api/todos/${todo.id}/`, updatedTodo, {
         headers: { Authorization: `Token ${token}`, "Content-Type": "application/json" },
       });
     } catch (error) {
@@ -83,7 +83,7 @@ const TodoList = () => {
         setEditingTodo={setEditingTodo} // Pass the setEditingTodo function to reset after update
       />
 
-      <ul className="todo-list">
+      <ul>
         {todos.map((todo) => (
           <li key={todo.id}>
             <input

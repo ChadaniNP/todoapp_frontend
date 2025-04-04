@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { BaseUrl } from "../constants";
 
+<<<<<<< HEAD
 function TodoForm({
   fetchTodos,
   editingTodo,
@@ -13,6 +14,13 @@ function TodoForm({
   const [description, setDescription] = useState("");
 
   // If editingTodo exists, fill the form with the todo's current data
+=======
+function TodoForm({ onTodoAdded, onTodoUpdated, editingTodo }) {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+
+  // If editingTodo exists, set form values to the todo's current values
+>>>>>>> 58a8919729d257d42deaf00b9879804d4196a6ff
   useEffect(() => {
     if (editingTodo) {
       setTitle(editingTodo.title);
@@ -20,9 +28,14 @@ function TodoForm({
     }
   }, [editingTodo]);
 
+<<<<<<< HEAD
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("Token");
+=======
+  async function handleSubmit(e) {
+    e.preventDefault(); // Prevent page reload
+>>>>>>> 58a8919729d257d42deaf00b9879804d4196a6ff
 
     if (!token) {
       alert("⚠️ No token found! Please log in first.");
@@ -30,12 +43,13 @@ function TodoForm({
     }
 
     const data = { title, description };
+<<<<<<< HEAD
 
     if (editingTodo) {
       // If editing, update the existing todo
       try {
         const response = await axios.put(
-          `${BaseUrl}/api/todos/${editingTodo.id}/update/`,
+          `${BaseUrl}/api/todos/${editingTodo.id}/`,
           data,
           {
             headers: {
@@ -68,6 +82,39 @@ function TodoForm({
     setEditingTodo(null); // Reset editingTodo
     fetchTodos(); // Fetch the updated todo list
   };
+=======
+
+    const config = {
+      method: "post",
+      url: `${BaseUrl}/api/todos/`, // Adjusted URL for flexibility
+      headers: {
+        Authorization: `Token ${localStorage.getItem("Token")}`, // Authorization header with token
+        "Content-Type": "application/json",
+      },
+      data: data,
+    };
+
+    try {
+      // If editingTodo exists, make a PUT request to update the todo
+      if (editingTodo) {
+        const response = await axios.put(`${BaseUrl}/api/todos/${editingTodo.id}/`, data, {
+          headers: { Authorization: `Token ${localStorage.getItem("Token")}` },
+        });
+        onTodoUpdated(response.data);  // Pass updated todo to parent component
+      } else {
+        // If no editingTodo, it means we are adding a new todo
+        const response = await axios(config);
+        onTodoAdded(response.data); // Pass new todo to parent component
+      }
+
+      // Reset form fields after submit
+      setTitle("");
+      setDescription("");
+    } catch (error) {
+      console.error("Error while adding/updating todo:", error);
+    }
+  }
+>>>>>>> 58a8919729d257d42deaf00b9879804d4196a6ff
 
   return (
     <div>

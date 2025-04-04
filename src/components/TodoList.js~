@@ -5,6 +5,7 @@ import { BaseUrl } from "../constants";
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
+<<<<<<< HEAD
   const [editingTodo, setEditingTodo] = useState(null);  // To handle editing
 
   // Fetch Todos from API
@@ -24,6 +25,9 @@ const TodoList = () => {
       console.error("Error fetching todos:", error);
     }
   };
+=======
+  const [editingTodo, setEditingTodo] = useState(null);
+>>>>>>> 58a8919729d257d42deaf00b9879804d4196a6ff
 
   // Handle when Edit button is clicked
   const handleEditClick = (todo) => {
@@ -72,10 +76,48 @@ const TodoList = () => {
     }
   };
 
+  const fetchTodos = async () => {
+    try {
+      const token = localStorage.getItem("Token");
+      const response = await axios.get(`${BaseUrl}/api/todos/`, {
+        headers: { Authorization: `Token ${token}` },
+      });
+      setTodos(response.data);
+    } catch (error) {
+      console.error("Error fetching todos:", error);
+    }
+  };
+
+  const handleEditClick = (todo) => {
+    setEditingTodo(todo);
+  };
+
+const handleDelete = async (todoId) => {
+  const token = localStorage.getItem("Token"); // Get auth token
+  if (!token) {
+    alert("⚠️ No token found! Please log in first.");
+    return;
+  }
+
+  try {
+    await axios.delete(`${BaseUrl}/api/todos/${todoId}/delete/`, {
+      headers: { Authorization: `Token ${token}` },
+    });
+
+    // Remove the deleted todo from the state
+    setTodos(todos.filter(todo => todo.id !== todoId));
+
+  } catch (error) {
+    console.error("Error deleting todo:", error);
+  }
+};
+
+
   return (
     <div>
       <h2>Todo List</h2>
       <TodoForm
+<<<<<<< HEAD
         editingTodo={editingTodo}
         onTodoAdded={(newTodo) => setTodos((prevTodos) => [...prevTodos, newTodo])}
         onTodoUpdated={handleTodoUpdated} // Pass the onTodoUpdated handler
@@ -83,7 +125,7 @@ const TodoList = () => {
         setEditingTodo={setEditingTodo} // Pass the setEditingTodo function to reset after update
       />
 
-      <ul>
+      <ul className="todo-list">
         {todos.map((todo) => (
           <li key={todo.id}>
             <input
@@ -97,6 +139,24 @@ const TodoList = () => {
           </li>
         ))}
       </ul>
+=======
+        fetchTodos={fetchTodos}
+        editingTodo={editingTodo}
+        onTodoAdded={newTodo => setTodos([...todos, newTodo])}
+        onTodoUpdated={updatedTodo => setTodos(todos.map(todo => todo.id === updatedTodo.id ? updatedTodo : todo))}
+      />
+      <ul>
+
+  {todos.map((todo) => (
+    <li key={todo.id}>
+      <strong>{todo.title}</strong> - {todo.completed ? "✅" : "❌"}
+      <button onClick={() => handleEditClick(todo)}>Edit</button>
+      <button onClick={() => handleDelete(todo.id)}>Delete</button> {/* Delete button */}
+    </li>
+  ))}
+</ul>
+
+>>>>>>> 58a8919729d257d42deaf00b9879804d4196a6ff
     </div>
   );
 };
