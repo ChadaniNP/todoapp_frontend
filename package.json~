@@ -1,15 +1,15 @@
 {
-  "name": "frontend",
+  "name": "todoapp_frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/user-event": "^13.5.0",
     "axios": "^1.8.4",
-    "bootstrap": "^5.3.3",
     "react": "^19.0.0",
-    "react-bootstrap": "^2.10.9",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^6.30.0",
+    "react-router-dom": "^7.4.1",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
@@ -38,15 +38,6 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
-    "@testing-library/user-event": "^14.6.1",
-    "jest": "^27.5.1",
-    "jest-environment-jsdom": "^29.7.0"
-  },
-  "jest": {
-    "transformIgnorePatterns": [
-      "node_modules/(?!(axios|react-router-dom)/)"
-    ]
+    "@testing-library/react": "^16.3.0"
   }
 }
